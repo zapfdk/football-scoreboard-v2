@@ -1,0 +1,12 @@
+<div class="pure-menu pure-menu-horizontal">
+
+    <a href="{% url 'index' %}" class="pure-menu-heading pure-menu-link">SCOREBOARD</a>
+    <ul class="pure-menu-list">
+        <li class="pure-menu-item"><a class="pure-menu-link" href="{% url 'game_state' %}">Gamestatus
+            Control</a></li>
+        <li class="pure-menu-item"><a class="pure-menu-link" href="{% url 'game_clock' %}">Clock Control</a></li>
+        <li class="pure-menu-item"><a class="pure-menu-link" href="{% url 'video_player' %}">Video Player</a>
+        </li>
+        <li class="pure-menu-item"><a class="pure-menu-link" href="{% url 'game_config' %}">Game Configuration</a></li>
+    </ul>
+</div>
