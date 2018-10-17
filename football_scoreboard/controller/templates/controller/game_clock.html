@@ -1,4 +1,16 @@
-{% extends "controller/base.html" %}
-
+{% extends "controller/base.html" %}   
+{% load static %}
 {% block body %}
+<link rel="stylesheet" href="{% static 'controller/css/game_clock.css' %}">
+
+<div class="container">
+    <div id="clock">3:30</div>
+    <div id="status"></div>
+    <button id="toggle_button">Toggle</button>
+    <input type="time" id="clock_input" max="12:00" min="0:00" value="12:00">
+    <button id="submit_clock">Set Gameclock</button>
+</div>
+
+<script src="{% static 'controller/js/game_clock.js' %}"></script>
+
 {% endblock %}

@@ -1,0 +1,37 @@
+.container { 
+    height: 50vh;
+    width: 50vw;
+    display: grid; 
+    grid-template-rows: 1fr 1% 10% 10%; 
+    grid-template-columns:50% 50%; 
+    grid-template-areas: 
+        "clock clock"
+        "status status"
+        "toggle toggle"
+        "set_clock submit_clock";
+    margin: auto;
+  }
+
+  #clock {
+      grid-area: clock;
+      align-self: center;
+      justify-self: center;
+      font-size: 15vh;
+  }
+
+  #status {
+      grid-area: status;
+      background: red;
+  }
+
+  #toggle_button {
+      grid-area: toggle;
+  }
+
+  #clock_input {
+      grid-area: set_clock;
+  }
+
+  #submit_clock {
+      grid-area: submit_clock;
+  }
