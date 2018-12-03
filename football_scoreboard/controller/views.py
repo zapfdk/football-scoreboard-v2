@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import permission_required
+from .web_hotkeys import hotkeys
 
 # Create your views here.
 def index(request):
@@ -7,7 +8,10 @@ def index(request):
 
 @permission_required('controller.change_clock')
 def game_clock(request):
-    return render(request, 'controller/game_clock.html')
+    return render(request, 'controller/game_clock.html', 
+    {
+        "hotkeys": hotkeys["game_clock"]
+    })
 
 @permission_required('controller.change_status')
 def game_state(request):

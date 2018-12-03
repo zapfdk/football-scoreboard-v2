@@ -2,13 +2,14 @@
     height: 50vh;
     width: 50vw;
     display: grid; 
-    grid-template-rows: 1fr 1% 10% 10%; 
+    grid-template-rows: 1fr 1% 10% 10% 10%; 
     grid-template-columns:50% 50%; 
     grid-template-areas: 
         "clock clock"
         "status status"
         "toggle toggle"
-        "set_clock submit_clock";
+        "set_clock submit_clock"
+        "reset_quarter reset_quarter";
     margin: auto;
   }
 
@@ -34,4 +35,8 @@
 
   #submit_clock {
       grid-area: submit_clock;
+  }
+
+  #reset_quarter {
+      grid-area: reset_quarter;
   }
