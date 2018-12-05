@@ -15,7 +15,10 @@ def game_clock(request):
 
 @permission_required('controller.change_status')
 def game_state(request):
-    return render(request, 'controller/game_state.html')
+    return render(request, 'controller/game_state.html',
+                  {
+                      "hotkeys": hotkeys["game_state"]
+                  })
 
 @permission_required('controller.change_config')
 def game_config(request):

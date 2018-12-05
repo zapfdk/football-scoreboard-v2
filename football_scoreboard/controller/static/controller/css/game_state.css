@@ -1,0 +1,85 @@
+.container {
+    height: 70vh;
+    width: 50vw;
+    display: grid;
+    grid-template-rows: 25% 10% 10% 30% 12.5% 12.5%;
+    grid-template-columns:50% 50%;
+    grid-template-areas:
+        "score_home score_guest"
+        "name_home name_guest"
+        "score_home_input score_guest_input"
+        "score_select send_score_buttons"
+        "down_form quarter_form"
+        "distance_form ballon_form";
+    margin: auto;
+  }
+
+#score_home {
+    grid-area: score_home;
+    justify-self: center;
+    font-size: 15vh;
+}
+
+#score_guest {
+    grid-area: score_guest;
+    justify-self: center;
+    font-size: 15vh;
+}
+
+#name_home {
+    grid-area: name_home;
+    font-size: 5vh;
+    justify-self: center;
+}
+
+#name_guest {
+    grid-area: name_guest;
+    font-size: 5vh;
+    justify-self: center;
+}
+
+#score_home_input {
+    grid-area: score_home_input;
+    justify-self: center;
+}
+
+#score_guest_input {
+    grid-area: score_guest_input;
+    justify-self: center;
+}
+
+#score_select {
+    grid-area: score_select;
+    justify-self: stretch;
+    align-self: stretch;
+}
+
+#send_score_buttons {
+    grid-area: send_score_buttons;
+    justify-self: stretch;
+    align-self: stretch;
+}
+
+#down_form {
+    grid-area: down_form;
+    justify-self: stretch;
+    align-self: stretch;
+}
+
+#quarter_form {
+    grid-area: quarter_form;
+    justify-self: stretch;
+    align-self: stretch;
+}
+
+#distance_form {
+    grid-area: distance_form;
+    justify-self: stretch;
+    align-self: stretch;
+}
+
+#ballon_form {
+    grid-area: ballon_form;
+    justify-self: stretch;
+    align-self: stretch;
+}

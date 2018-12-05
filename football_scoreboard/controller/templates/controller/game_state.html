@@ -1,5 +1,83 @@
 {% extends "controller/base.html" %}
-
+{% load static %}
 {% block body %}
-<div id=""></div>
+<link rel="stylesheet" href="{% static 'controller/css/game_state.css' %}">
+<script src="{% static 'controller/js/mousetrap.min.js' %}"></script>
+<script src="{% static 'controller/js/mousetrap-global-bind.min.js' %}"></script>
+<script src="{% static 'controller/js/game_state.js' %}"></script>
+
+<div class="container">
+    <div id="score_home">1</div>
+    <div id="score_guest">2</div>
+    <div id="name_home">Home</div>
+    <div id="name_guest">Guest</div>
+    <input id="score_home_input" type="number">
+    <input id="score_guest_input" type="number">
+
+    <select id="score_select" size="4">
+        <option value="6">Touchdown (6)</option>
+        <option value="3">Fieldgoal (3)</option>
+        <option value="2">Safety/2PT (2)</option>
+        <option value="1">PAT (1)</option>
+    </select>
+
+    <div id="send_score_buttons">
+        <button id="score_home_add">Add to Score</button>
+        <br>
+        <button id="score_home_sub">Subtract from Score</button>
+        <br>
+
+        <button id="score_guest_add">Add to Score</button>
+        <br>
+        <button id="score_guest_sub">Subtract from Score</button>
+        <br>
+    </div>
+
+    <form id="down_form" onsubmit="return sendDown()" action="">
+        <fieldset id="down_set">
+            <legend>Down ({{hotkeys.select_down.0}})</legend>
+            <input type="radio" name="down_radio" value="1" id="down_1">
+            <label for="down_1">1</label>
+            <input type="radio" name="down_radio" value="2" id="down_2">
+            <label for="down_2">2</label>
+            <input type="radio" name="down_radio" value="3" id="down_3">
+            <label for="down_3">3</label>
+            <input type="radio" name="down_radio" value="4" id="down_4">
+            <label for="down_4">4</label>
+            <input type="submit" value="Send">
+        </fieldset>
+    </form>
+
+    <form id="quarter_form" onsubmit="return sendQuarter()" action="">
+        <fieldset id="quarter_set">
+            <legend>Quarter ({{hotkeys.select_quarter.0}})</legend>
+            <input type="radio" name="quarter_radio" value="1" id="quarter_1">
+            <label for="quarter_1">1</label>
+            <input type="radio" name="quarter_radio" value="2" id="quarter_2">
+            <label for="quarter_2">2</label>
+            <input type="radio" name="quarter_radio" value="3" id="quarter_3">
+            <label for="quarter_3">3</label>
+            <input type="radio" name="quarter_radio" value="4" id="quarter_4">
+            <label for="quarter_4">4</label>
+            <input type="submit" value="Send">
+        </fieldset>
+    </form>
+
+    <form id="distance_form" onsubmit="return sendDistance()" action="">
+        <fieldset id="distance_set">
+            <legend>Distance ({{hotkeys.select_distance.0}})</legend>
+            <input id="distance_input" type="number">
+            <input type="submit" value="Send">
+        </fieldset>
+    </form>
+
+    <form id="ballon_form" onsubmit="return sendBallon()" action="">
+        <fieldset id="ballon_set">
+            <legend>Ball on ({{hotkeys.select_ballon.0}})</legend>
+            <input id="ballon_input" type="number">
+            <input type="submit" value="Send">
+        </fieldset>
+    </form>
+</div>
+
 {% endblock %}

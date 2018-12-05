@@ -20,4 +20,5 @@ urlpatterns = [
     path('controller/', include('controller.urls')),
     path('display/', include('display.urls')),
     path('admin/', admin.site.urls),
+    path('accounts/login/', admin.site.urls),
 ]
