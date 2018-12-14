@@ -24,8 +24,7 @@ var chatSocket = new WebSocket('ws://' + window.location.host + '/ws/controller/
 
 chatSocket.onmessage = function(e) {
     var data = JSON.parse(e.data);
-    var message = data['message'];
-    console.log("message");
+    console.log(data);
 };
 
 chatSocket.onclose = function(e) {
@@ -39,27 +38,42 @@ function sendControl(command, value){
     }));
 }
 
-function sendDown() {
+function setDown() {
     let down = document.querySelector('input[name="down_radio"]:checked').value;
     sendControl('SET_DOWN', down);
     return false;
 }
 
-function sendQuarter() {
+function setQuarter() {
     let quarter = document.querySelector('input[name="quarter_radio"]:checked').value;
     sendControl('SET_QUARTER', quarter);
     return false;
 }
 
-function sendDistance() {
+function setDistance() {
     let distance = document.getElementById('distance_input').value;
     sendControl('SET_DISTANCE', distance);
     return false;
 }
 
-function sendBallon() {
+function setBallon() {
     let ballon = document.getElementById('ballon_input').value;
     sendControl('SET_BALLON', ballon);
     return false;
 }
 
+function setScore() {
+
+    sendControl('SET_SCORE', []);
+    return false;
+}
+
+function setPossession() {
+    
+    sendControl('SET_POSESSION', );
+}
+
+function setTimeouts() {
+
+    sendControl('SET_TIMEOUTS', []);
+}
