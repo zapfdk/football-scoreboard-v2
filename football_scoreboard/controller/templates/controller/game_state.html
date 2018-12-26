@@ -11,8 +11,20 @@
     <div id="score_guest">2</div>
     <div id="name_home">Home</div>
     <div id="name_guest">Guest</div>
-    <input id="score_home_input" type="number">
-    <input id="score_guest_input" type="number">
+    <form id="score_home_form" onsubmit="return setScore(0)" action="">
+        <fieldset>
+            <legend>Set Score (Home)</legend>
+            <input id="score_home_input" type="number">
+            <input type="submit" value="Send">
+        </fieldset>
+    </form>
+    <form id="score_guest_form" onsubmit="return setScore(1)" action="">
+        <fieldset>
+            <legend>Set Score (Guest)</legend>
+            <input id="score_guest_input" type="number">
+            <input type="submit" value="Send">
+        </fieldset>
+    </form>
 
     <select id="score_select" size="4">
         <option value="6">Touchdown (6)</option>
@@ -32,8 +44,38 @@
         <button id="score_guest_sub">Subtract from Score</button>
         <br>
     </div>
+    <form id="timeouts_home_form" onsubmit="return setTimeouts(0)" action="">
+        <fieldset>
+            <legend>Timeouts (Home)</legend>
+            <input type="button" value="+1" onclick="modTimeouts(0, 1)">
+            <input type="button" value="-1" onclick="modTimeouts(0, -1)">
+            <input type="radio" name="timeouts_home_radio" value="1" id="timeouts_home_1">
+            <label for="timeouts_home_1">1</label>
+            <input type="radio" name="timeouts_home_radio" value="2" id="timeouts_home_2">
+            <label for="timeouts_home_2">2</label>
+            <input type="radio" name="timeouts_home_radio" value="3" id="timeouts_home_3">
+            <label for="timeouts_home_3">3</label>
+            <input type="submit" value="Send">
+            <label id="current_timeouts_home">Current:</label>
+        </fieldset>
+    </form>
+    <form id="timeouts_guest_form" onsubmit="return setTimeouts(1)" action="">
+        <fieldset>
+            <legend>Timeouts (Guest)</legend>
+            <input type="button" value="+1" onclick="modTimeouts(1, 1)">
+            <input type="button" value="-1" onclick="modTimeouts(1, -1)">
+            <input type="radio" name="timeouts_guest_radio" value="1" id="timeouts_guest_1">
+            <label for="timeouts_guest_1">1</label>
+            <input type="radio" name="timeouts_guest_radio" value="2" id="timeouts_guest_2">
+            <label for="timeouts_guest_2">2</label>
+            <input type="radio" name="timeouts_guest_radio" value="3" id="timeouts_guest_3">
+            <label for="timeouts_guest_3">3</label>
+            <input type="submit" value="Send">
+            <label id="current_timeouts_guest">Current:</label>
+        </fieldset>
+    </form>
 
-    <form id="down_form" onsubmit="return sendDown()" action="">
+    <form id="down_form" onsubmit="return setDown()" action="">
         <fieldset id="down_set">
             <legend>Down ({{hotkeys.select_down.0}})</legend>
             <input type="radio" name="down_radio" value="1" id="down_1">
@@ -45,10 +87,11 @@
             <input type="radio" name="down_radio" value="4" id="down_4">
             <label for="down_4">4</label>
             <input type="submit" value="Send">
+            <label id="current_down">Current:</label>
         </fieldset>
     </form>
 
-    <form id="quarter_form" onsubmit="return sendQuarter()" action="">
+    <form id="quarter_form" onsubmit="return setQuarter()" action="">
         <fieldset id="quarter_set">
             <legend>Quarter ({{hotkeys.select_quarter.0}})</legend>
             <input type="radio" name="quarter_radio" value="1" id="quarter_1">
@@ -60,24 +103,37 @@
             <input type="radio" name="quarter_radio" value="4" id="quarter_4">
             <label for="quarter_4">4</label>
             <input type="submit" value="Send">
+            <label id="current_quarter">Current:</label>
         </fieldset>
     </form>
 
-    <form id="distance_form" onsubmit="return sendDistance()" action="">
+    <form id="distance_form" onsubmit="return setDistance()" action="">
         <fieldset id="distance_set">
             <legend>Distance ({{hotkeys.select_distance.0}})</legend>
             <input id="distance_input" type="number">
+            <input id="goalline_checkbox" type="checkbox" onchange="return changeGoallineBox(this);">
+            <label for="goalline_checkbox">& Goal</label>
             <input type="submit" value="Send">
+            <label id="current_distance">Current:</label>
         </fieldset>
     </form>
 
-    <form id="ballon_form" onsubmit="return sendBallon()" action="">
+    <form id="ballon_form" onsubmit="return setBallon()" action="">
         <fieldset id="ballon_set">
             <legend>Ball on ({{hotkeys.select_ballon.0}})</legend>
             <input id="ballon_input" type="number">
             <input type="submit" value="Send">
+            <label id="current_ballon">Current:</label>
         </fieldset>
     </form>
+    <form id="helper_form">
+        <fieldset id="helper_set">
+            <legend>Helper Shortcuts</legend>
+            <input id="first_down_button" type="button" value="Reset to First Down" onclick="return resetFirstDown();">
+            <input id="reset_half_button" type="button" value="Reset Half" onclick="return resetHalf();">
+        </fieldset>
+    </form>
+
 </div>
 
 {% endblock %}

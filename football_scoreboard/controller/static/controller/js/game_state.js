@@ -77,3 +77,8 @@ function setTimeouts() {
 
     sendControl('SET_TIMEOUTS', []);
 }
+
+function changeGoallineBox(element) {
+    let distIn = document.getElementById("distance_input");
+    distIn.disabled = element.checked;
+}

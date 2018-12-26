@@ -7,10 +7,12 @@
     grid-template-areas:
         "score_home score_guest"
         "name_home name_guest"
-        "score_home_input score_guest_input"
+        "score_home_form score_guest_form"
+        "timeouts_home_form timeouts_guest_form"
         "score_select send_score_buttons"
         "down_form quarter_form"
-        "distance_form ballon_form";
+        "distance_form ballon_form"
+        "helper_form helper_form";
     margin: auto;
   }
 
@@ -38,14 +40,16 @@
     justify-self: center;
 }
 
-#score_home_input {
-    grid-area: score_home_input;
-    justify-self: center;
+#score_home_form {
+    grid-area: score_home_form;
+    justify-self: stretch;
+    align-self: stretch;
 }
 
-#score_guest_input {
-    grid-area: score_guest_input;
-    justify-self: center;
+#score_guest_form {
+    grid-area: score_guest_form;
+    justify-self: stretch;
+    align-self: stretch;
 }
 
 #score_select {
@@ -83,3 +87,22 @@
     justify-self: stretch;
     align-self: stretch;
 }
+
+#timeouts_home_form {
+    grid-area: timeouts_home_form;
+    justify-self: stretch;
+    align-self: stretch;
+}
+
+#timeouts_guest_form {
+    grid-area: timeouts_guest_form;
+    justify-self: stretch;
+    align-self: stretch;
+}
+
+#helper_form {
+    grid-area: helper_form;
+    justify-self: stretch;
+    align-self: stretch;
+}
+
