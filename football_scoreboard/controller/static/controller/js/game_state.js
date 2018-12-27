@@ -58,7 +58,12 @@ function updateStatus(data) {
                 elementPropDict[key][0].innerHTML = data[key][0];
                 elementPropDict[key][1].innerHTML = data[key][1];
             } else {
-                elementPropDict[key].innerHTML = data[key];
+                console.log(key, data[key]);
+                if (key === "distance" && data[key] === -1) {
+                    elementPropDict[key].innerHTML = "to Goalline";
+                } else {
+                    elementPropDict[key].innerHTML = data[key];
+                }
             }
         }
     }
@@ -85,6 +90,9 @@ function setQuarter() {
 
 function setDistance() {
     let distance = document.getElementById('distance_input').value;
+    if (document.getElementById("goalline_checkbox").checked) {
+        distance = -1;
+    }
     sendControl('SET_DISTANCE', distance);
     return false;
 }
@@ -97,7 +105,7 @@ function setBallon() {
 
 function setScore(teamId) {
     let teams = {0: "home", 1: "guest"};
-    let score = Number(document.getElementById("score_"+teams[teamId]+"_input").value);
+    let score = Number(document.getElementById("score_" + teams[teamId] + "_input").value);
     console.log(teamId, score);
     sendControl('SET_SCORE', [score, teamId]);
     return false;
@@ -108,9 +116,31 @@ function setPossession() {
     sendControl('SET_POSESSION',);
 }
 
-function setTimeouts() {
+function setTimeouts(teamId) {
+    let teams = {0: "home", 1: "guest"};
+    let score = Number(document.getElementById("score_" + teams[teamId] + "_input").value);
+    console.log(teamId, score);
+    sendControl('SET_TIMEOUTS', [score, teamId]);
+    return false;
+}
 
-    sendControl('SET_TIMEOUTS', []);
+function resetFirstDown(isGoalline) {
+    if (confirm("Reset First Down?")) {
+        let distance = 10;
+        if (isGoalline) {
+            distance = -1;
+        }
+        sendControl("SET_DOWN", 1);
+        sendControl("SET_DISTANCE", distance);
+    }
+}
+
+function resetHalf() {
+    if (confirm("Reset Half?")) {
+        sendControl("SET_DOWN", 1);
+        sendControl("SET_DISTANCE", 10);
+        sendControl("SET_BALLON", 35);
+    }
 }
 
 function changeGoallineBox(element) {
