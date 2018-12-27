@@ -1,5 +1,6 @@
 from channels.generic.websocket import WebsocketConsumer
 import json
+from ast import literal_eval
 
 from football_scoreboard.redis_wrapper import RedisWrapper
 
@@ -10,7 +11,7 @@ class ControllerConsumer(WebsocketConsumer):
         "SET_DOWN": "down",
         "SET_QUARTER": "quarter",
         "SET_DISTANCE": "distance",
-        "SET_BALLON": "ballon",
+        "SET_BALLON": "ball_on",
         "SET_SCORE": "score",
         "SET_TIMEOUTS": "timeouts",
         "SET_POSSESSION": "possession",
@@ -39,10 +40,15 @@ class ControllerConsumer(WebsocketConsumer):
     def process_command(self, command, value):
         gs = rw.get_current_gamestate()
 
-        if len(value) == 1:
-            gs.set_state_property(self.commands[command], int(value))
-        elif len(value) == 2:
-            gs.set_state_property(self.commands[command], int(value[0]), int(value[1]))
+        if isinstance(value, str):
+            val = literal_eval(value)
+        else:
+            val = value
+
+        if isinstance(val, int):
+            gs.set_state_property(self.commands[command], val)
+        elif isinstance(val, tuple) or isinstance(val, list):
+            gs.set_state_property(self.commands[command], int(val[0]), int(val[1]))
 
         rw.save_gamestate(gs)
 

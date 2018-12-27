@@ -22,7 +22,7 @@ Mousetrap.bindGlobal('b', function () {
 
 var chatSocket = new WebSocket('ws://' + window.location.host + '/ws/controller/');
 
-chatSocket.onmessage = function(e) {
+chatSocket.onmessage = function (e) {
     let data = JSON.parse(e.data);
     console.log(data["msg"]);
     if (data["msg"] === "UPDATE") {
@@ -30,13 +30,13 @@ chatSocket.onmessage = function(e) {
     }
 };
 
-chatSocket.onopen = function(e) {
+chatSocket.onopen = function (e) {
     let connStatus = document.getElementById("connection_status");
     connStatus.innerHTML = "connected";
     connStatus.style.color = "#00FF00";
 };
 
-chatSocket.onclose = function(e) {
+chatSocket.onclose = function (e) {
     let connStatus = document.getElementById("connection_status");
     connStatus.innerHTML = "closed";
     connStatus.style.color = "#FF0000";
@@ -48,18 +48,23 @@ function updateStatus(data) {
         "quarter": document.getElementById("current_quarter"),
         "distance": document.getElementById("current_distance"),
         "score": [document.getElementById("score_home"), document.getElementById("score_guest")],
-        "ballon": document.getElementById("current_ballon"),
+        "ball_on": document.getElementById("current_ballon"),
     };
     console.log(elementPropDict);
     console.log(data);
-    for (let key in data){
-        if (data.hasOwnProperty(key) && key in elementPropDict){
-            elementPropDict[key].innerHTML = data[key];
+    for (let key in data) {
+        if (data.hasOwnProperty(key) && key in elementPropDict) {
+            if (key === "score" || key === "timeouts") {
+                elementPropDict[key][0].innerHTML = data[key][0];
+                elementPropDict[key][1].innerHTML = data[key][1];
+            } else {
+                elementPropDict[key].innerHTML = data[key];
+            }
         }
     }
 }
 
-function sendControl(command, value){
+function sendControl(command, value) {
     chatSocket.send(JSON.stringify({
         command: command,
         value: value
@@ -90,14 +95,17 @@ function setBallon() {
     return false;
 }
 
-function setScore() {
-    sendControl('SET_SCORE', []);
+function setScore(teamId) {
+    let teams = {0: "home", 1: "guest"};
+    let score = Number(document.getElementById("score_"+teams[teamId]+"_input").value);
+    console.log(teamId, score);
+    sendControl('SET_SCORE', [score, teamId]);
     return false;
 }
 
 function setPossession() {
-    
-    sendControl('SET_POSESSION', );
+
+    sendControl('SET_POSESSION',);
 }
 
 function setTimeouts() {
