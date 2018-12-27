@@ -23,21 +23,41 @@ Mousetrap.bindGlobal('b', function () {
 var chatSocket = new WebSocket('ws://' + window.location.host + '/ws/controller/');
 
 chatSocket.onmessage = function(e) {
-    var data = JSON.parse(e.data);
-    console.log(data);
+    let data = JSON.parse(e.data);
+    console.log(data["msg"]);
+    if (data["msg"] === "UPDATE") {
+        updateStatus(data["data"]);
+    }
 };
 
 chatSocket.onopen = function(e) {
     let connStatus = document.getElementById("connection_status");
     connStatus.innerHTML = "connected";
     connStatus.style.color = "#00FF00";
-}
+};
 
 chatSocket.onclose = function(e) {
     let connStatus = document.getElementById("connection_status");
     connStatus.innerHTML = "closed";
     connStatus.style.color = "#FF0000";
 };
+
+function updateStatus(data) {
+    let elementPropDict = {
+        "down": document.getElementById("current_down"),
+        "quarter": document.getElementById("current_quarter"),
+        "distance": document.getElementById("current_distance"),
+        "score": [document.getElementById("score_home"), document.getElementById("score_guest")],
+        "ballon": document.getElementById("current_ballon"),
+    };
+    console.log(elementPropDict);
+    console.log(data);
+    for (let key in data){
+        if (data.hasOwnProperty(key) && key in elementPropDict){
+            elementPropDict[key].innerHTML = data[key];
+        }
+    }
+}
 
 function sendControl(command, value){
     chatSocket.send(JSON.stringify({
@@ -71,7 +91,6 @@ function setBallon() {
 }
 
 function setScore() {
-
     sendControl('SET_SCORE', []);
     return false;
 }

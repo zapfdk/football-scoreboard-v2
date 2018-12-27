@@ -7,8 +7,8 @@
 <script src="{% static 'controller/js/game_state.js' %}"></script>
 
 <div class="container">
-    <div id="score_home">1</div>
-    <div id="score_guest">2</div>
+    <div id="score_home">0</div>
+    <div id="score_guest">0</div>
     <div id="name_home">Home</div>
     <div id="name_guest">Guest</div>
     <form id="set_score_home_form" onsubmit="return setScore(0)" action="">
@@ -125,7 +125,7 @@
             <input type="radio" name="timeouts_home_radio" value="3" id="timeouts_home_3">
             <label for="timeouts_home_3">3</label>
             <input type="submit" value="Send">
-            <label id="current_timeouts_home">Current:</label>
+            <label>Current: </label><label id="current_timeouts_home">0</label>
         </fieldset>
     </form>
     <form id="timeouts_guest_form" onsubmit="return setTimeouts(1)" action="">
@@ -140,7 +140,7 @@
             <input type="radio" name="timeouts_guest_radio" value="3" id="timeouts_guest_3">
             <label for="timeouts_guest_3">3</label>
             <input type="submit" value="Send">
-            <label id="current_timeouts_guest">Current:</label>
+            <label>Current: </label><label id="current_timeouts_guest">0</label>
         </fieldset>
     </form>
 
@@ -156,7 +156,7 @@
             <input type="radio" name="down_radio" value="4" id="down_4">
             <label for="down_4">4</label>
             <input type="submit" value="Send">
-            <label id="current_down">Current:</label>
+            <label>Current: </label><label id="current_down">0</label>
         </fieldset>
     </form>
 
@@ -172,7 +172,7 @@
             <input type="radio" name="quarter_radio" value="4" id="quarter_4">
             <label for="quarter_4">4</label>
             <input type="submit" value="Send">
-            <label id="current_quarter">Current:</label>
+            <label>Current: </label><label id="current_quarter">0</label>
         </fieldset>
     </form>
 
@@ -183,7 +183,7 @@
             <input id="goalline_checkbox" type="checkbox" onchange="return changeGoallineBox(this);">
             <label for="goalline_checkbox">& Goal</label>
             <input type="submit" value="Send">
-            <label id="current_distance">Current:</label>
+            <label>Current: </label><label id="current_distance">0</label>
         </fieldset>
     </form>
 
@@ -192,7 +192,7 @@
             <legend>Ball on ({{hotkeys.select_ballon.0}})</legend>
             <input id="ballon_input" type="number">
             <input type="submit" value="Send">
-            <label id="current_ballon">Current:</label>
+            <label>Current: </label><label id="current_ballon">0</label>
         </fieldset>
     </form>
     <form id="helper_form">

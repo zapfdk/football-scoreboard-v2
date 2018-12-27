@@ -18,7 +18,8 @@ class ControllerConsumer(WebsocketConsumer):
     def connect(self):
         self.accept()
         self.send(text_data=json.dumps({
-            'status': "OK"
+            'msg': "UPDATE",
+            "data": rw.get_current_gamestate().state
         }))
 
     def disconnect(self, code):
@@ -31,7 +32,9 @@ class ControllerConsumer(WebsocketConsumer):
 
         response = self.process_command(command, value)
 
-        self.send(text_data=json.dumps(response))
+        self.send(text_data=json.dumps({
+            "msg": "UPDATE",
+            "data": response}))
 
     def process_command(self, command, value):
         gs = rw.get_current_gamestate()
