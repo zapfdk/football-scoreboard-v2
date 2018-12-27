@@ -1,108 +1,107 @@
 .container {
     height: 70vh;
-    width: 50vw;
+    width: 70vw;
     display: grid;
-    grid-template-rows: 25% 10% 10% 30% 12.5% 12.5%;
+    /*grid-template-rows: 15% 5% 10% 25% 3% 10% 10% 10% 10% 10%;*/
     grid-template-columns:50% 50%;
     grid-template-areas:
         "score_home score_guest"
         "name_home name_guest"
-        "score_home_form score_guest_form"
+        "set_score_home_form set_score_guest_form"
+        "change_score_home_form change_score_guest_form"
         "timeouts_home_form timeouts_guest_form"
         "score_select send_score_buttons"
         "down_form quarter_form"
         "distance_form ballon_form"
-        "helper_form helper_form";
+        "helper_form helper_form"
+        "connection_form connection_form";
     margin: auto;
   }
 
 #score_home {
     grid-area: score_home;
     justify-self: center;
-    font-size: 15vh;
+    font-size: 10vh;
 }
 
 #score_guest {
     grid-area: score_guest;
     justify-self: center;
-    font-size: 15vh;
+    font-size: 10vh;
 }
 
 #name_home {
     grid-area: name_home;
-    font-size: 5vh;
+    font-size: 3vh;
     justify-self: center;
 }
 
 #name_guest {
     grid-area: name_guest;
-    font-size: 5vh;
+    font-size: 3vh;
     justify-self: center;
 }
 
-#score_home_form {
-    grid-area: score_home_form;
+form {
     justify-self: stretch;
     align-self: stretch;
 }
 
-#score_guest_form {
-    grid-area: score_guest_form;
-    justify-self: stretch;
-    align-self: stretch;
+#set_score_home_form {
+    grid-area: set_score_home_form;
+}
+
+#set_score_guest_form {
+    grid-area: set_score_guest_form;
+}
+
+#change_score_home_form {
+    grid-area: change_score_home_form;
+}
+
+#change_score_guest_form {
+    grid-area: change_score_guest_form;
 }
 
 #score_select {
     grid-area: score_select;
-    justify-self: stretch;
-    align-self: stretch;
 }
 
 #send_score_buttons {
     grid-area: send_score_buttons;
-    justify-self: stretch;
-    align-self: stretch;
 }
 
 #down_form {
     grid-area: down_form;
-    justify-self: stretch;
-    align-self: stretch;
 }
 
 #quarter_form {
     grid-area: quarter_form;
-    justify-self: stretch;
-    align-self: stretch;
 }
 
 #distance_form {
     grid-area: distance_form;
-    justify-self: stretch;
-    align-self: stretch;
 }
 
 #ballon_form {
     grid-area: ballon_form;
-    justify-self: stretch;
-    align-self: stretch;
 }
 
 #timeouts_home_form {
     grid-area: timeouts_home_form;
-    justify-self: stretch;
-    align-self: stretch;
 }
 
 #timeouts_guest_form {
     grid-area: timeouts_guest_form;
-    justify-self: stretch;
-    align-self: stretch;
 }
 
 #helper_form {
     grid-area: helper_form;
-    justify-self: stretch;
-    align-self: stretch;
 }
+
+#connection_form {
+    grid-area: connection_form;
+}
+
+
 

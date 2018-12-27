@@ -27,8 +27,16 @@ chatSocket.onmessage = function(e) {
     console.log(data);
 };
 
+chatSocket.onopen = function(e) {
+    let connStatus = document.getElementById("connection_status");
+    connStatus.innerHTML = "connected";
+    connStatus.style.color = "#00FF00";
+}
+
 chatSocket.onclose = function(e) {
-    console.error('Chat socket closed unexpectedly');
+    let connStatus = document.getElementById("connection_status");
+    connStatus.innerHTML = "closed";
+    connStatus.style.color = "#FF0000";
 };
 
 function sendControl(command, value){

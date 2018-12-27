@@ -11,14 +11,14 @@
     <div id="score_guest">2</div>
     <div id="name_home">Home</div>
     <div id="name_guest">Guest</div>
-    <form id="score_home_form" onsubmit="return setScore(0)" action="">
+    <form id="set_score_home_form" onsubmit="return setScore(0)" action="">
         <fieldset>
             <legend>Set Score (Home)</legend>
             <input id="score_home_input" type="number">
             <input type="submit" value="Send">
         </fieldset>
     </form>
-    <form id="score_guest_form" onsubmit="return setScore(1)" action="">
+    <form id="set_score_guest_form" onsubmit="return setScore(1)" action="">
         <fieldset>
             <legend>Set Score (Guest)</legend>
             <input id="score_guest_input" type="number">
@@ -26,24 +26,93 @@
         </fieldset>
     </form>
 
-    <select id="score_select" size="4">
-        <option value="6">Touchdown (6)</option>
-        <option value="3">Fieldgoal (3)</option>
-        <option value="2">Safety/2PT (2)</option>
-        <option value="1">PAT (1)</option>
-    </select>
+    <form id="change_score_home_form">
+        <fieldset>
+            <legend>Change Score (Home)</legend>
+            <table>
+                <tr>
+                    <td>
+                        <label>Touchdown:</label>
+                    </td>
+                    <td>
+                        <input type="button" value="+6" onclick="changeScore(0, +6);">
+                        <input type="button" value="-6" onclick="changeScore(0, -6);">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Fieldgoal:</label>
+                    </td>
+                    <td>
+                        <input type="button" value="+3" onclick="changeScore(0, +3);">
+                        <input type="button" value="-3" onclick="changeScore(0, -3);">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Safety/2PT:</label>
+                    </td>
+                    <td>
+                        <input type="button" value="+2" onclick="changeScore(0, +2);">
+                        <input type="button" value="-2" onclick="changeScore(0, -2);">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>PAT:</label>
+                    </td>
+                    <td>
+                        <input type="button" value="+1" onclick="changeScore(0, +1);">
+                        <input type="button" value="-1" onclick="changeScore(0, -1);">
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+    </form>
+    <form id="change_score_guest_form">
+        <fieldset>
+            <legend>Change Score (Guest)</legend>
+            <table>
+                <tr>
+                    <td>
+                        <label>Touchdown:</label>
+                    </td>
+                    <td>
+                        <input type="button" value="+6" onclick="changeScore(1, +6);">
+                        <input type="button" value="-6" onclick="changeScore(1, -6);">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Fieldgoal:</label>
+                    </td>
+                    <td>
+                        <input type="button" value="+3" onclick="changeScore(1, +3);">
+                        <input type="button" value="-3" onclick="changeScore(1, -3);">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Safety/2PT:</label>
+                    </td>
+                    <td>
+                        <input type="button" value="+2" onclick="changeScore(1, +2);">
+                        <input type="button" value="-2" onclick="changeScore(1, -2);">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>PAT:</label>
+                    </td>
+                    <td>
+                        <input type="button" value="+1" onclick="changeScore(1, +1);">
+                        <input type="button" value="-1" onclick="changeScore(1, -1);">
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+    </form>
 
-    <div id="send_score_buttons">
-        <button id="score_home_add">Add to Score</button>
-        <br>
-        <button id="score_home_sub">Subtract from Score</button>
-        <br>
-
-        <button id="score_guest_add">Add to Score</button>
-        <br>
-        <button id="score_guest_sub">Subtract from Score</button>
-        <br>
-    </div>
     <form id="timeouts_home_form" onsubmit="return setTimeouts(0)" action="">
         <fieldset>
             <legend>Timeouts (Home)</legend>
@@ -133,7 +202,14 @@
             <input id="reset_half_button" type="button" value="Reset Half" onclick="return resetHalf();">
         </fieldset>
     </form>
-
+    <form id="connection_form">
+        <fieldset id="connection_set">
+            <legend>Technical Info</legend>
+            <label for="connection_status">Connection Status: </label><label id="connection_status"></label>
+            <br>
+            <label for="last_transmission">Last Transmission: </label><label id="last_transmission">No transmission</label>
+        </fieldset>
+    </form>
 </div>
 
 {% endblock %}
