@@ -3,8 +3,11 @@ import json
 from ast import literal_eval
 
 from football_scoreboard.redis_wrapper import RedisWrapper
+from footballscoring import gameclock
 
 rw = RedisWrapper()
+
+clock = gameclock.GameClock(quarter_length=rw.get_current_gameconfig().config["quarter_length"])
 
 class ControllerConsumer(WebsocketConsumer):
     commands = {
@@ -15,12 +18,16 @@ class ControllerConsumer(WebsocketConsumer):
         "SET_SCORE": "score",
         "SET_TIMEOUTS": "timeouts",
         "SET_POSSESSION": "possession",
+        "CHANGE_SCORE": "score",
+        "CHANGE_TIMEOUTS": "timeouts",
+        "SET_CONFIG_NAME": "name",
     }
     def connect(self):
         self.accept()
         self.send(text_data=json.dumps({
             'msg': "UPDATE",
-            "data": rw.get_current_gamestate().state
+            "gamestate": rw.get_current_gamestate().state,
+            "gameconfig": rw.get_current_gameconfig().config
         }))
 
     def disconnect(self, code):
@@ -31,25 +38,66 @@ class ControllerConsumer(WebsocketConsumer):
         command = text_data_json['command']
         value = text_data_json['value']
 
-        response = self.process_command(command, value)
+        status = "successful"
+
+        try:
+            response = self.process_command(command, value)
+        except Exception as e:
+            print(str(e))
+            status = "not sucessfull"
+            response = rw.get_current_gamestate().state
 
         self.send(text_data=json.dumps({
             "msg": "UPDATE",
-            "data": response}))
+            "gamestate": rw.get_current_gamestate().state,
+            "gameconfig": rw.get_current_gameconfig().config,
+            "transmittedCommand": "{}, {}".format(command, value),
+            "transmissionStatus": status,
+            }
+        ))
 
     def process_command(self, command, value):
-        gs = rw.get_current_gamestate()
-
         if isinstance(value, str):
             val = literal_eval(value)
         else:
             val = value
 
-        if isinstance(val, int):
-            gs.set_state_property(self.commands[command], val)
-        elif isinstance(val, tuple) or isinstance(val, list):
-            gs.set_state_property(self.commands[command], int(val[0]), int(val[1]))
+        if "CONFIG" in command:
+            gc = rw.get_current_gameconfig()
+            print(gc.config)
+            if "NAME" in command:
+                if isinstance(val, int):
+                    pass
+                elif isinstance(val, tuple) or isinstance(val, list):
+                    print(value)
 
-        rw.save_gamestate(gs)
+                    gc.config["name"][val[1]] = val[0]
+                    print(gc.config)
 
-        return gs.state
+            rw.save_gameconfig(gc)
+
+        else:
+            gs = rw.get_current_gamestate()
+            if "SET" in command:
+                if isinstance(val, int):
+                    gs.set_state_property(self.commands[command], val)
+                elif isinstance(val, tuple) or isinstance(val, list):
+                    gs.set_state_property(self.commands[command], int(val[0]), int(val[1]))
+            elif "CHANGE" in command:
+                if isinstance(val, int):
+                    gs.modify_state_property(self.commands[command], val)
+                elif isinstance(val, tuple) or isinstance(val, list):
+                    gs.modify_state_property(self.commands[command], int(val[0]), int(val[1]))
+
+            rw.save_gamestate(gs)
+
+class ClockControllerConsumer(WebsocketConsumer):
+    def connect(self):
+        self.accept()
+        self.send(text_data=json.dumps({
+            'msg': "UPDATE",
+            "data": rw.get_current_gamestate().state
+        }))
+
+    def connect(self):
+        pass

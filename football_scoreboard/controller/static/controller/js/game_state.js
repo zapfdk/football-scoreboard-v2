@@ -1,5 +1,47 @@
 'use strict';
 
+var chatSocket;
+
+function setupWebsocket(){
+    chatSocket = new WebSocket('ws://' + window.location.host + '/ws/controller/');
+
+    chatSocket.onmessage = function (e) {
+        let data = JSON.parse(e.data);
+        console.log(data["msg"]);
+        if (data["msg"] === "UPDATE") {
+            updateStatus(data["gamestate"]);
+        }
+        if ("transmissionStatus" in data){
+            let lastTransmission = data["transmissionStatus"] + ": " + data["transmittedCommand"];
+            document.getElementById("last_transmission").innerText = lastTransmission;
+        }
+        if ("gameconfig" in data){
+            let gameconfig = data["gameconfig"];
+            console.log(gameconfig);
+            document.getElementById("name_home").innerText = gameconfig["name"][0];
+            document.getElementById("name_guest").innerText = gameconfig["name"][1];
+        }
+    };
+
+    chatSocket.onopen = function (e) {
+        let connStatus = document.getElementById("connection_status");
+        connStatus.innerHTML = "connected";
+        connStatus.style.color = "#00FF00";
+        document.getElementById("reconnect_button").style.display = "none";
+    };
+
+    chatSocket.onclose = function (e) {
+        let connStatus = document.getElementById("connection_status");
+        connStatus.innerHTML = "closed";
+        connStatus.style.color = "#FF0000";
+        document.getElementById("reconnect_button").style.display = "block";
+    };
+}
+
+document.addEventListener("DOMContentLoaded", function(event) {
+  setupWebsocket();
+});
+
 Mousetrap.bindGlobal('d', function () {
     document.getElementById('down_1').focus();
 });
@@ -20,27 +62,7 @@ Mousetrap.bindGlobal('b', function () {
     ballonField.value = "";
 });
 
-var chatSocket = new WebSocket('ws://' + window.location.host + '/ws/controller/');
 
-chatSocket.onmessage = function (e) {
-    let data = JSON.parse(e.data);
-    console.log(data["msg"]);
-    if (data["msg"] === "UPDATE") {
-        updateStatus(data["data"]);
-    }
-};
-
-chatSocket.onopen = function (e) {
-    let connStatus = document.getElementById("connection_status");
-    connStatus.innerHTML = "connected";
-    connStatus.style.color = "#00FF00";
-};
-
-chatSocket.onclose = function (e) {
-    let connStatus = document.getElementById("connection_status");
-    connStatus.innerHTML = "closed";
-    connStatus.style.color = "#FF0000";
-};
 
 function updateStatus(data) {
     let elementPropDict = {
@@ -48,7 +70,7 @@ function updateStatus(data) {
         "quarter": document.getElementById("current_quarter"),
         "distance": document.getElementById("current_distance"),
         "score": [document.getElementById("score_home"), document.getElementById("score_guest")],
-        "ball_on": document.getElementById("current_ballon"),
+        "ball_on": document.getElementById("current_ballon")
     };
     console.log(elementPropDict);
     console.log(data);
@@ -112,8 +134,17 @@ function setScore(teamId) {
 }
 
 function setPossession() {
+    sendControl('SET_POSSESSION');
+}
 
-    sendControl('SET_POSESSION',);
+function changeScore(teamId, value){
+    sendControl('CHANGE_SCORE', [value, teamId]);
+    return false;
+}
+
+function changeTimeouts(teamId, value){
+    sendControl('CHANGE_TIMEOUTS', [value, teamId]);
+    return false;
 }
 
 function setTimeouts(teamId) {

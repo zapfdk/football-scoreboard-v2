@@ -23,3 +23,15 @@ class RedisWrapper:
 
     def save_gamestate(self, gamestate):
         self.r.set('gamestate', json.dumps(gamestate.state))
+
+    def get_current_gameconfig(self):
+        if not self.r.get('gameconfig'):
+            return gamestate.GameConfig()
+        else:
+            return self._get_gameconfig_from_redis()
+
+    def _get_gameconfig_from_redis(self):
+        return gamestate.GameConfig(json.loads(self.r.get('gameconfig')))
+
+    def save_gameconfig(self, gameconfig):
+        self.r.set('gameconfig', json.dumps(gameconfig.config))

@@ -1,4 +1,21 @@
 {% extends "controller/base.html" %}
-
+{% load static %}
 {% block body %}
+<script src="{% static 'controller/js/game_config.js' %}"></script>
+
+<form id="set_home_name_form" onsubmit="return setName('home');" action="">
+    <fieldset>
+        <legend>Home Name</legend>
+        <input id="home_name_input" type="text">
+        <input type="submit" value="Send">
+    </fieldset>
+</form>
+<form id="set_guest_name_form" onsubmit="return setName('guest')" action="">
+    <fieldset>
+        <legend>Guest Name</legend>
+        <input id="guest_name_input" type="text">
+        <input type="submit" value="Send">
+    </fieldset>
+</form>
+
 {% endblock %}

@@ -116,8 +116,8 @@
     <form id="timeouts_home_form" onsubmit="return setTimeouts(0)" action="">
         <fieldset>
             <legend>Timeouts (Home)</legend>
-            <input type="button" value="+1" onclick="modTimeouts(0, 1)">
-            <input type="button" value="-1" onclick="modTimeouts(0, -1)">
+            <input type="button" value="+1" onclick="changeTimeouts(0, 1)">
+            <input type="button" value="-1" onclick="changeTimeouts(0, -1)">
             <input type="radio" name="timeouts_home_radio" value="1" id="timeouts_home_1">
             <label for="timeouts_home_1">1</label>
             <input type="radio" name="timeouts_home_radio" value="2" id="timeouts_home_2">
@@ -131,8 +131,8 @@
     <form id="timeouts_guest_form" onsubmit="return setTimeouts(1)" action="">
         <fieldset>
             <legend>Timeouts (Guest)</legend>
-            <input type="button" value="+1" onclick="modTimeouts(1, 1)">
-            <input type="button" value="-1" onclick="modTimeouts(1, -1)">
+            <input type="button" value="+1" onclick="changeTimeouts(1, 1)">
+            <input type="button" value="-1" onclick="changeTimeouts(1, -1)">
             <input type="radio" name="timeouts_guest_radio" value="1" id="timeouts_guest_1">
             <label for="timeouts_guest_1">1</label>
             <input type="radio" name="timeouts_guest_radio" value="2" id="timeouts_guest_2">
@@ -206,6 +206,8 @@
     <form id="connection_form">
         <fieldset id="connection_set">
             <legend>Technical Info</legend>
+            <button id="reconnect_button" onclick="setupWebsocket(); return false;">Reconnect</button>
+            <br>
             <label for="connection_status">Connection Status: </label><label id="connection_status"></label>
             <br>
             <label for="last_transmission">Last Transmission: </label><label id="last_transmission">No transmission</label>
