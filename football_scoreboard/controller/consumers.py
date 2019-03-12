@@ -91,13 +91,33 @@ class ControllerConsumer(WebsocketConsumer):
 
             rw.save_gamestate(gs)
 
+
 class ClockControllerConsumer(WebsocketConsumer):
     def connect(self):
         self.accept()
+        clock.callback = self.clock_callback
+
         self.send(text_data=json.dumps({
             'msg': "UPDATE",
-            "data": rw.get_current_gamestate().state
         }))
 
-    def connect(self):
-        pass
+    def receive(self, text_data=None, bytes_data=None):
+        text_data_json = json.loads(text_data)
+        print(text_data_json)
+        command = text_data_json['command']
+        value = text_data_json['value']
+
+        if command == "TOGGLE_CLOCK":
+            clock.toggle()
+        elif command == "RESET_QUARTER":
+            clock.reset_clock()
+        elif command == "SET_CLOCK":
+            minutes, seconds = value.split(":")
+            minutes, seconds = int(minutes), int(seconds)
+            clock.set_clock(minutes=minutes, seconds=seconds)
+
+    def clock_callback(self):
+        self.send(text_data=json.dumps({
+            "time": clock.remaining_time.seconds,
+            "running": clock.running,
+        }))

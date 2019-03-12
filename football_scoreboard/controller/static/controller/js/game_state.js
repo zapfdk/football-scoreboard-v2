@@ -70,7 +70,8 @@ function updateStatus(data) {
         "quarter": document.getElementById("current_quarter"),
         "distance": document.getElementById("current_distance"),
         "score": [document.getElementById("score_home"), document.getElementById("score_guest")],
-        "ball_on": document.getElementById("current_ballon")
+        "ball_on": document.getElementById("current_ballon"),
+        "timeouts": [document.getElementById("current_timeouts_home"), document.getElementById("current_timeouts_guest")]
     };
     console.log(elementPropDict);
     console.log(data);

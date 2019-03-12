@@ -8,12 +8,13 @@ let resetQuarterButton = document.getElementById('reset_quarter');
 let color = false;
 
 
-var chatSocket = new WebSocket('ws://' + window.location.host + '/ws/controller/');
+var chatSocket = new WebSocket('ws://' + window.location.host + '/ws/clock_controller/');
 
 chatSocket.onmessage = function(e) {
-    var data = JSON.parse(e.data);
-    var message = data['message'];
-    console.log("message");
+    let data = JSON.parse(e.data);
+    let time = data["time"];
+    let running = data["running"];
+    updateStatusDisplay(time, running);
 };
 
 chatSocket.onclose = function(e) {
@@ -27,25 +28,27 @@ function sendControl(command, value){
     }));
 }
 
-function updateStatusDisplay(data){
+function updateStatusDisplay(time, running){
+    let minutes = Math.floor(time/60);
+    let seconds = time % 60;
+    let timeFormatted = minutes.toString().padStart(2, '0')+":"+seconds.toString().padStart(2, '0');
 
+    document.getElementById("clock").innerText = timeFormatted;
+
+    if (running) {
+        status.style.backgroundColor = "#00ff00";
+    }
+    else {
+        status.style.backgroundColor = "#ff0000";
+    }
 }
 
 submitClockButton.addEventListener('click', function(event) {
     let clockValue = clockInput.value;
-    clock.innerHTML = clockValue;
-
     sendControl("SET_CLOCK", clockValue);
 });
 
 toggleButton.addEventListener('click', function(event) {
-    if (color) {
-        status.style.backgroundColor = "#ff0000";
-    }
-    else {
-        status.style.backgroundColor = "#00ff00";
-    }
-    color = !color;
     sendControl("TOGGLE_CLOCK", 0);
 });
 
