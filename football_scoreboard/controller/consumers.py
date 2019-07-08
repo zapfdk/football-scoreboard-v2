@@ -117,6 +117,8 @@ class ClockControllerConsumer(WebsocketConsumer):
             clock.set_clock(minutes=minutes, seconds=seconds)
 
     def clock_callback(self):
+        rw.save_gameclock(clock)
+
         self.send(text_data=json.dumps({
             "time": clock.remaining_time.seconds,
             "running": clock.running,

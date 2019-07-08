@@ -35,3 +35,14 @@ class RedisWrapper:
 
     def save_gameconfig(self, gameconfig):
         self.r.set('gameconfig', json.dumps(gameconfig.config))
+
+    def get_current_gameclock(self):
+        if not self.r.get('gameclock'):
+            return 0
+        else:
+            return self._get_gameclock_from_redis()
+    def _get_gameclock_from_redis(self):
+        return int(self.r.get('gameclock'))
+
+    def save_gameclock(self, gameclock):
+        self.r.set('gameclock', gameclock.remaining_time.seconds)

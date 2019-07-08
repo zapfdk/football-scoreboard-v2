@@ -1,0 +1,206 @@
+.container {
+    display: grid;
+    grid-template-columns: 7fr 2fr 5fr 0.5fr 0.5fr 5fr 2fr 7fr;
+    grid-template-rows: 8fr 2fr 3fr 2fr 3fr;
+    grid-template-areas:
+        "logo_home  score_home  score_home    colon_score colon_score score_guest   score_guest logo_guest"
+        "name_home  poss_home   minutes_clock colon_clock colon_clock seconds_clock poss_guest  name_guest"
+        "timeouts_home_label timeouts_home minutes_clock colon_clock colon_clock seconds_clock timeouts_guest timeouts_guest_label"
+        "down_label distance_label distance_label distance_label ball_on_label ball_on_label ball_on_label quarter_label"
+        "down distance distance distance ball_on ball_on ball_on quarter"
+    ;
+    background-image: linear-gradient(#000040, darkslateblue);
+    grid-gap: 15px;
+    width: 100vw;
+    height: 100vh;
+    font-family: sans-serif;
+    background-size:     cover;
+    background-repeat:   no-repeat;
+    background-position: center center;
+    align-content: space-around;
+}
+
+.score_home,
+.score_guest,
+.colon_score,
+.colon_clock,
+.minutes_clock,
+.seconds_clock,
+.name_home,
+.name_guest,
+.down_label,
+.down,
+.distance_label,
+.distance,
+.ball_on_label,
+.ball_on,
+.quarter_label,
+.timeouts_home_label,
+.timeouts_home,
+.timeouts_guest_label,
+.timeouts_guest,
+.quarter,
+.poss_home,
+.poss_guest
+{
+    color: white;
+    width: 100%;
+    height: 100%;
+    align-items: end;
+    text-align: center;
+    -webkit-text-stroke-color: #202020;
+    -webkit-text-stroke-width: 2px;
+}
+
+.score_home,
+.score_guest {
+    font-size: 30vh;
+    background-color: rgba(42, 42, 42, 0.5);
+}
+
+.colon_score{
+    font-size: 20vh;
+    background-color: rgba(42,42,42,0.5);
+}
+
+.name_home,
+.name_guest,
+.timeouts_home_label,
+.timeouts_guest_label,
+.down_label,
+.distance_label,
+.ball_on_label,
+.quarter_label {
+    font-size: 8vh;
+}
+
+.timeouts_guest,
+.timeouts_home,
+.down,
+.distance,
+.ball_on,
+.quarter,
+.poss_home,
+.poss_guest {
+    font-size: 10vh;
+    background-color: rgba(42,42,42,0.5);
+}
+
+.minutes_clock,
+.colon_clock,
+.seconds_clock {
+    font-size: 20vh;
+    background-color: rgba(42,42,42,0.5);
+}
+
+.logo_home {
+    grid-area: logo_home;
+    align-self: center;
+}
+
+.score_home {
+    grid-area: score_home;
+}
+
+.colon_score {
+    grid-area: colon_score;
+    justify-self: center;
+}
+
+.score_guest {
+    grid-area: score_guest;
+}
+
+.logo_guest {
+    grid-area: logo_guest;
+    align-self: center;
+}
+
+.name_home {
+    grid-area: name_home;
+}
+
+.poss_home {
+    grid-area: poss_home;
+}
+
+.minutes_clock {
+    grid-area: minutes_clock;
+}
+
+.colon_clock {
+    grid-area: colon_clock;
+}
+
+.seconds_clock {
+    grid-area: seconds_clock;
+}
+
+.poss_guest {
+    grid-area: poss_guest;
+}
+
+.name_guest {
+    grid-area: name_guest;
+}
+
+.timeouts_home_label {
+    grid-area: timeouts_home_label;
+    text-align: right;
+}
+
+.timeouts_home {
+    grid-area: timeouts_home;
+}
+
+.timeouts_guest_label {
+    grid-area: timeouts_guest_label;
+    text-align: left;
+}
+
+.timeouts_guest {
+    grid-area: timeouts_guest;
+}
+
+.down_label {
+    grid-area: down_label;
+}
+
+.down {
+    grid-area: down;
+}
+
+.distance_label {
+    grid-area: distance_label;
+}
+
+.distance {
+    grid-area: distance;
+}
+
+.ball_on_label{
+    grid-area: ball_on_label;
+}
+
+.ball_on {
+    grid-area: ball_on;
+}
+
+.quarter_label {
+    grid-area: quarter_label;
+}
+
+.quarter {
+    grid-area: quarter;
+}
+
+.fitting_img {
+    width: 25vw;
+}
+
+body {
+    margin-bottom: 0px;
+    margin-top: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+}

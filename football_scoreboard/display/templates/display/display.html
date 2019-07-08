@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Scoreboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+<body>
+
+<link rel="stylesheet" href="{% static 'display/css/display.css' %}">
+<script src="{% static 'display/js/display_update.js' %}"></script>
+
+<div class="container">
+    <div class="logo_home"><img class="fitting_img"
+                                src="{% static 'display/erfurt_indigos_transparent_bg.png' %}">
+    </div>
+    <div class="score_home">99</div>
+    <div class="colon_score">:</div>
+    <div class="score_guest"></div>
+    <div class="logo_guest"><img class="fitting_img"
+                                 src="{% static 'display/hanfrieds_transparent_bg.png' %}"></div>
+
+    <div class="name_home"></div>
+    <div class="poss_home"></div>
+    <div class="minutes_clock"></div>
+    <div class="colon_clock">:</div>
+    <div class="seconds_clock"></div>
+    <div class="poss_guest"></div>
+    <div class="name_guest"></div>
+
+    <div class="timeouts_home_label">TOL</div>
+    <div class="timeouts_home"></div>
+    <div class="timeouts_guest_label">TOL</div>
+    <div class="timeouts_guest"></div>
+
+    <div class="down_label">Down</div>
+    <div class="distance_label">Distance</div>
+    <div class="ball_on_label">Ball on</div>
+    <div class="quarter_label">Quarter</div>
+
+    <div class="down"></div>
+    <div class="distance"></div>
+    <div class="ball_on"></div>
+    <div class="quarter"></div>
+</div>
+
+</body>
+</html>
