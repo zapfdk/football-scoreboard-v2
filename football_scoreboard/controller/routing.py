@@ -1,8 +1,8 @@
-from django.conf.urls import url
+from django.urls import re_path
 
 from . import consumers
 
 websocket_urlpatterns = [
-    url(r'^ws/controller/$', consumers.ControllerConsumer),
-    url(r'^ws/clock_controller/$', consumers.ClockControllerConsumer),
+    re_path(r'^ws/controller/$', consumers.ControllerConsumer.as_asgi()),
+    re_path(r'^ws/clock_controller/$', consumers.ClockControllerConsumer.as_asgi()),
 ]

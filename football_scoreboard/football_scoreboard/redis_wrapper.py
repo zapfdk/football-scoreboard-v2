@@ -1,6 +1,8 @@
 import redis
 import json
 
+from django.core.cache import cache
+
 from footballscoring import gamestate, gameclock, gameconfig
 
 HOST = 'localhost'
@@ -13,36 +15,28 @@ class RedisWrapper:
         self.r = redis.StrictRedis(host=HOST, port=PORT, db=DB)
 
     def get_current_gamestate(self):
-        if not self.r.get('gamestate'):
-            return gamestate.GameState()
+        if (gs := cache.get('gamestate')):
+            return gs
         else:
-            return self._get_gamestate_from_redis()
+            return gamestate.GameState()
 
-    def _get_gamestate_from_redis(self):
-        return gamestate.GameState(json.loads(self.r.get('gamestate')))
-
-    def save_gamestate(self, gamestate):
-        self.r.set('gamestate', json.dumps(gamestate.state))
+    def save_gamestate(self, gs):
+        cache.set('gamestate', gs)
 
     def get_current_gameconfig(self):
-        if not self.r.get('gameconfig'):
-            return gamestate.GameConfig()
+        if (gc := cache.get('gameconfig')):
+            return gc
         else:
-            return self._get_gameconfig_from_redis()
+            return gamestate.GameConfig(quarter_length=12)
 
-    def _get_gameconfig_from_redis(self):
-        return gamestate.GameConfig(json.loads(self.r.get('gameconfig')))
-
-    def save_gameconfig(self, gameconfig):
-        self.r.set('gameconfig', json.dumps(gameconfig.config))
+    def save_gameconfig(self, gc):
+        cache.set('gameconfig', gc)
 
     def get_current_gameclock(self):
-        if not self.r.get('gameclock'):
-            return 0
+        if (gc := cache.get('gameclock')):
+            return gc
         else:
-            return self._get_gameclock_from_redis()
-    def _get_gameclock_from_redis(self):
-        return int(self.r.get('gameclock'))
+            return 0
 
-    def save_gameclock(self, gameclock):
-        self.r.set('gameclock', gameclock.remaining_time.seconds)
+    def save_gameclock(self, gc):
+        self.r.set('gameclock', gc.remaining_time.seconds)

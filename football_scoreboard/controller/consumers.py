@@ -95,7 +95,7 @@ class ControllerConsumer(WebsocketConsumer):
 class ClockControllerConsumer(WebsocketConsumer):
     def connect(self):
         self.accept()
-        clock.callback = self.clock_callback
+        clock.process = self.clock_callback
 
         self.send(text_data=json.dumps({
             'msg': "UPDATE",
@@ -115,6 +115,11 @@ class ClockControllerConsumer(WebsocketConsumer):
             minutes, seconds = value.split(":")
             minutes, seconds = int(minutes), int(seconds)
             clock.set_clock(minutes=minutes, seconds=seconds)
+        rw.save_gameclock(clock)
+        self.send(text_data=json.dumps({
+            "time": clock.remaining_time.seconds,
+            "running": clock.running,
+        }))
 
     def clock_callback(self):
         rw.save_gameclock(clock)

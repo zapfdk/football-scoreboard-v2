@@ -26,14 +26,15 @@ function handle_gamestate_update(gamestate_data){
             Object.keys(gamestate_data[key]).forEach(function (gameStateKey){
                 let gameStateValue = gamestate_data[key][gameStateKey];
                 switch(gameStateKey){
-                    case "score":
-                        console.log("here");
-                        document.getElementsByClassName("score_home")[0].innerHTML = gameStateValue[0];
-                        document.getElementsByClassName("score_guest")[0].innerHTML = gameStateValue[1];
+                    case "score_home":
+                        document.getElementsByClassName("score_home")[0].innerHTML = gameStateValue;
+                    case "score_guest":
+                        document.getElementsByClassName("score_guest")[0].innerHTML = gameStateValue;
                         break;
-                    case "timeouts":
-                        document.getElementsByClassName("timeouts_home")[0].innerHTML = gameStateValue[0];
-                        document.getElementsByClassName("timeouts_guest")[0].innerHTML = gameStateValue[1];
+                    case "timeouts_home":
+                        document.getElementsByClassName("timeouts_home")[0].innerHTML = gameStateValue;
+                    case "timeouts_guest":
+                        document.getElementsByClassName("timeouts_guest")[0].innerHTML = gameStateValue;
                         break;
                     case "quarter":
                         document.getElementsByClassName("quarter")[0].innerHTML = gameStateValue;
