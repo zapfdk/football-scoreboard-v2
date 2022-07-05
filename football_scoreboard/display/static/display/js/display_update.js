@@ -40,7 +40,13 @@ function handle_gamestate_update(gamestate_data){
                         document.getElementsByClassName("quarter")[0].innerHTML = gameStateValue;
                         break;
                     case "distance":
-                        document.getElementsByClassName("distance")[0].innerHTML = gameStateValue;
+                        let distance = gameStateValue;
+                        if (distance > 0) {
+                            document.getElementsByClassName("distance")[0].innerHTML = distance;
+                        }
+                        else if (distance === -1) {
+                            document.getElementsByClassName("distance")[0].innerHTML = "Goal";
+                        }
                         break;
                     case "ball_on":
                         document.getElementsByClassName("ball_on")[0].innerHTML = gameStateValue;
@@ -49,10 +55,15 @@ function handle_gamestate_update(gamestate_data){
                         document.getElementsByClassName("down")[0].innerHTML = gameStateValue;
                         break;
                     case "possession":
+                        let poss_classes = ["poss_home", "poss_guest"];
                         if (gameStateValue <= 1 & gameStateValue >= 0) {
-                            let poss_classes = ["poss_home", "poss_guest"];
                             document.getElementsByClassName(poss_classes[gameStateValue])[0].innerHTML = FOOTBALL_CHAR;
                             document.getElementsByClassName(poss_classes[1 - gameStateValue])[0].innerHTML = "";
+                        }
+                        if (gameStateValue === 2) {
+                            document.getElementsByClassName(poss_classes[0])[0].innerHTML = "";
+                            document.getElementsByClassName(poss_classes[1])[0].innerHTML = "";
+
                         }
                         break;
                 }

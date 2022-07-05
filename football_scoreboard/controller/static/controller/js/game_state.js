@@ -71,17 +71,18 @@ function updateStatus(data) {
         "distance": document.getElementById("current_distance"),
         "score": [document.getElementById("score_home"), document.getElementById("score_guest")],
         "ball_on": document.getElementById("current_ballon"),
-        "timeouts": [document.getElementById("current_timeouts_home"), document.getElementById("current_timeouts_guest")]
+        "timeouts": [document.getElementById("current_timeouts_home"), document.getElementById("current_timeouts_guest")],
+        "possession": document.getElementById("current_possession")
     };
     console.log(elementPropDict);
     console.log(data);
     for (let key in data) {
         if (data.hasOwnProperty(key) && key in elementPropDict) {
+                console.log(key, data[key]);
             if (key === "score" || key === "timeouts") {
                 elementPropDict[key][0].innerHTML = data[key][0];
                 elementPropDict[key][1].innerHTML = data[key][1];
             } else {
-                console.log(key, data[key]);
                 if (key === "distance" && data[key] === -1) {
                     elementPropDict[key].innerHTML = "to Goalline";
                 } else {
@@ -135,7 +136,9 @@ function setScore(teamId) {
 }
 
 function setPossession() {
-    sendControl('SET_POSSESSION');
+    let possession = document.querySelector('input[name="possession_radio"]:checked').value;
+    sendControl('SET_POSSESSION', possession);
+    return false;
 }
 
 function changeScore(teamId, value){

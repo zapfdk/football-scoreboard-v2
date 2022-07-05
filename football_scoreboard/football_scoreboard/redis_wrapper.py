@@ -32,11 +32,11 @@ class RedisWrapper:
     def save_gameconfig(self, gc):
         cache.set('gameconfig', gc)
 
-    def get_current_gameclock(self):
+    def get_current_gameclock_seconds(self):
         if (gc := cache.get('gameclock')):
             return gc
         else:
-            return 0
+            return None 
 
-    def save_gameclock(self, gc):
-        self.r.set('gameclock', gc.remaining_time.seconds)
+    def save_gameclock_seconds(self, gc):
+        cache.set('gameclock', gc.remaining_time.seconds)

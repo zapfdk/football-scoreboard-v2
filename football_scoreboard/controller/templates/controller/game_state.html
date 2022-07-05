@@ -195,6 +195,19 @@
             <label>Current: </label><label id="current_ballon">0</label>
         </fieldset>
     </form>
+    <form id="possession_form" onsubmit="return setPossession()" action="">
+        <fieldset id="possession_set">
+            <legend>Possession</legend>
+            <input type="radio" name="possession_radio" value="0" id="possession_0">
+            <label for="possession_0">Heim (0)</label>
+            <input type="radio" name="possession_radio" value="1" id="possession_1">
+            <label for="possession_1">Gast (1)</label>
+            <input type="radio" name="possession_radio" value="2" id="possession_2">
+            <label for="possession_2">Undefiniert (Münzwurf, etc.) (2)</label>
+            <input type="submit" value="Send">
+            <label>Current: </label><label id="current_possession">0</label>
+        </fieldset>
+    </form>
     <form id="helper_form">
         <fieldset id="helper_set">
             <legend>Helper Shortcuts</legend>

@@ -1,42 +1,50 @@
 .container { 
-    height: 50vh;
-    width: 50vw;
-    display: grid; 
-    grid-template-rows: 1fr 1% 10% 10% 10%; 
-    grid-template-columns:50% 50%; 
-    grid-template-areas: 
-        "clock clock"
-        "status status"
-        "toggle toggle"
-        "set_clock submit_clock"
-        "reset_quarter reset_quarter";
-    margin: auto;
-  }
+        height: 50vh;
+        width: 50vw;
+        display: grid; 
+        grid-template-rows: 1fr 1% 10% 10% 10%; 
+        grid-template-columns:50% 50%; 
+        grid-template-areas: 
+            "clock clock"
+            "status status"
+            "toggle toggle"
+            "set_clock submit_clock"
+            "reset_quarter reset_quarter";
+        margin: auto;
+}
 
-  #clock {
-      grid-area: clock;
-      align-self: center;
-      justify-self: center;
-      font-size: 15vh;
-  }
+#clock {
+  grid-area: clock;
+  align-self: center;
+  justify-self: center;
+  font-size: 15vh;
+}
 
-  #status {
-      grid-area: status;
-      background: red;
-  }
+#status {
+  grid-area: status;
+  background: red;
+}
 
-  #toggle_button {
-      grid-area: toggle;
-  }
+#toggle_button {
+  grid-area: toggle;
+}
 
-  #clock_input {
-      grid-area: set_clock;
-  }
+#clock_input {
+  grid-area: set_clock;
+}
 
-  #submit_clock {
-      grid-area: submit_clock;
-  }
+#submit_clock {
+  grid-area: submit_clock;
+}
 
-  #reset_quarter {
-      grid-area: reset_quarter;
-  }
+#reset_quarter {
+  grid-area: reset_quarter;
+}
+
+input[type=time]::-webkit-datetime-edit-ampm-field {
+    display: none;
+}
+
+input::-webkit-datetime-edit-ampm-field {
+    display: none;
+}

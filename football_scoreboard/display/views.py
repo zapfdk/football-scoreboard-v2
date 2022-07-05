@@ -19,11 +19,10 @@ def convert_gamestate(gamestate):
 
 def get_gamestatus(request):
     gamestate = rw.get_current_gamestate()
-    gameclock = rw.get_current_gameclock()
+    gameclock = rw.get_current_gameclock_seconds()
     gameconfig = rw.get_current_gameconfig().config
 
     gs = gamestate.state
-    gameclock_timedelta = timedelta(seconds=gameclock)
 
     gamestatus = {
         "gamestate": {
@@ -44,11 +43,5 @@ def get_gamestatus(request):
         "gameclock": gameclock,
         "gameconfig": gameconfig,
     }
-    print(gamestatus)
 
     return JsonResponse(gamestatus)
-
-    return JsonResponse({"gamestate": gamestate.state,
-            "gameclock": gameclock,
-            "gameconfig": gameconfig,
-            })

@@ -48,8 +48,12 @@ submitClockButton.addEventListener('click', function(event) {
     sendControl("SET_CLOCK", clockValue);
 });
 
-toggleButton.addEventListener('click', function(event) {
+function toggleClock() {
     sendControl("TOGGLE_CLOCK", 0);
+};
+
+toggleButton.addEventListener('click', function(event) {
+    toggleClock();
 });
 
 resetQuarterButton.addEventListener('click', function(event) {
@@ -57,3 +61,10 @@ resetQuarterButton.addEventListener('click', function(event) {
         sendControl("RESET_QUARTER", 0);
     }
 })
+
+window.onkeydown = function(event) {
+    if (event.keyCode === 32) {
+        event.preventDefault();
+        toggleClock();
+    }
+}

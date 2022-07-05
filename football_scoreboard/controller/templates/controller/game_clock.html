@@ -7,9 +7,9 @@
     <div id="clock">3:30</div>
     <div id="status"></div>
     <button id="toggle_button">Toggle ({{hotkeys.toggle_clock.0}})</button>
-    <input type="time" id="clock_input" max="12:00" min="0:00" value="12:00">
+    <input type="time" id="clock_input" max="00:12:00" min="00:00:00" value="00:12:00" step=1>
     <button id="submit_clock">Set Gameclock</button>
-    <button id="reset_quarter">Reset Quarter ({{hotkeys.reset_quarter.0}})</button>
+    <button id="reset_quarter">Reset Quarter</button>
 </div>
 
 <script src="{% static 'controller/js/game_clock.js' %}"></script>

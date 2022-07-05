@@ -7,7 +7,6 @@ from footballscoring import gameclock
 
 rw = RedisWrapper()
 
-clock = gameclock.GameClock(quarter_length=rw.get_current_gameconfig().config["quarter_length"])
 
 class ControllerConsumer(WebsocketConsumer):
     commands = {
@@ -21,6 +20,7 @@ class ControllerConsumer(WebsocketConsumer):
         "CHANGE_SCORE": "score",
         "CHANGE_TIMEOUTS": "timeouts",
         "SET_CONFIG_NAME": "name",
+        "TOGGLE_CLOCK": ""
     }
     def connect(self):
         self.accept()
@@ -75,7 +75,6 @@ class ControllerConsumer(WebsocketConsumer):
                     print(gc.config)
 
             rw.save_gameconfig(gc)
-
         else:
             gs = rw.get_current_gamestate()
             if "SET" in command:
@@ -91,19 +90,27 @@ class ControllerConsumer(WebsocketConsumer):
 
             rw.save_gamestate(gs)
 
+current_gameclock_seconds = rw.get_current_gameclock_seconds()
+clock = gameclock.GameClock(quarter_length=rw.get_current_gameconfig().config["quarter_length"])
+clock.start()
+if current_gameclock_seconds:
+    clock.set_clock(minutes=0, seconds=current_gameclock_seconds)
+
+rw.save_gameclock_seconds(clock)
 
 class ClockControllerConsumer(WebsocketConsumer):
     def connect(self):
         self.accept()
-        clock.process = self.clock_callback
+        clock.set_loop_callback(self.clock_callback)
 
         self.send(text_data=json.dumps({
             'msg': "UPDATE",
+            "time": clock.remaining_time.seconds,
+            "running": clock.running,
         }))
 
     def receive(self, text_data=None, bytes_data=None):
         text_data_json = json.loads(text_data)
-        print(text_data_json)
         command = text_data_json['command']
         value = text_data_json['value']
 
@@ -112,17 +119,17 @@ class ClockControllerConsumer(WebsocketConsumer):
         elif command == "RESET_QUARTER":
             clock.reset_clock()
         elif command == "SET_CLOCK":
-            minutes, seconds = value.split(":")
+            hours, minutes, seconds = value.split(":")
             minutes, seconds = int(minutes), int(seconds)
             clock.set_clock(minutes=minutes, seconds=seconds)
-        rw.save_gameclock(clock)
+        rw.save_gameclock_seconds(clock)
         self.send(text_data=json.dumps({
             "time": clock.remaining_time.seconds,
             "running": clock.running,
         }))
 
     def clock_callback(self):
-        rw.save_gameclock(clock)
+        rw.save_gameclock_seconds(clock)
 
         self.send(text_data=json.dumps({
             "time": clock.remaining_time.seconds,

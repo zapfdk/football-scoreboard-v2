@@ -122,6 +122,7 @@
 
 .poss_home {
     grid-area: poss_home;
+    font-size: 5vh;
 }
 
 .minutes_clock {
@@ -138,6 +139,7 @@
 
 .poss_guest {
     grid-area: poss_guest;
+    font-size: 5vh;
 }
 
 .name_guest {
