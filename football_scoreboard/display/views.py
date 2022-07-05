@@ -19,8 +19,9 @@ def convert_gamestate(gamestate):
 
 def get_gamestatus(request):
     gamestate = rw.get_current_gamestate()
-    gameclock = rw.get_current_gameclock_seconds()
+    gameclock = rw.get_current_gameclock_microseconds()
     gameconfig = rw.get_current_gameconfig().config
+    gameclock_seconds = gameclock // 1e6
 
     gs = gamestate.state
 
@@ -35,12 +36,12 @@ def get_gamestatus(request):
             "name_guest": gameconfig["name"][1],
             "timeouts_home": gs["timeouts"][0],
             "timeouts_guest": gs["timeouts"][1],
-            "gameclock": f"{(gameclock % 3600 // 60):02}:{(gameclock%60):02}",
+            "gameclock": f"{(gameclock_seconds % 3600 // 60):02}:{(gameclock_seconds%60):02}",
             "possession": gs["possession"],
             "quarter": gs["quarter"],
             "clock_running": False,
         },
-        "gameclock": gameclock,
+        "gameclock": gameclock_seconds,
         "gameconfig": gameconfig,
     }
 

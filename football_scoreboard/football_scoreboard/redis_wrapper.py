@@ -1,5 +1,6 @@
 import redis
 import json
+from datetime import timedelta as td
 
 from django.core.cache import cache
 
@@ -32,11 +33,12 @@ class RedisWrapper:
     def save_gameconfig(self, gc):
         cache.set('gameconfig', gc)
 
-    def get_current_gameclock_seconds(self):
-        if (gc := cache.get('gameclock')):
+    def get_current_gameclock_microseconds(self):
+        gc = cache.get('gameclock')
+        if gc is not None:
             return gc
         else:
             return None 
 
-    def save_gameclock_seconds(self, gc):
-        cache.set('gameclock', gc.remaining_time.seconds)
+    def save_gameclock_microseconds(self, gc):
+        cache.set('gameclock', gc.remaining_time / td(microseconds=1))

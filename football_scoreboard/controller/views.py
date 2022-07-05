@@ -10,19 +10,21 @@ def index(request):
 def game_clock(request):
     return render(request, 'controller/game_clock.html', 
     {
-        "hotkeys": hotkeys["game_clock"]
+        "hotkeys": hotkeys["game_clock"],
+        "current_page": "GameClock"
     })
 
 @permission_required('controller.change_status')
 def game_state(request):
     return render(request, 'controller/game_state.html',
                   {
-                      "hotkeys": hotkeys["game_state"]
+                      "hotkeys": hotkeys["game_state"],
+                      "current_page": "GameState"
                   })
 
 @permission_required('controller.change_config')
 def game_config(request):
-    return render(request, 'controller/game_config.html')
+    return render(request, 'controller/game_config.html', {"current_page": "GameConfig"})
 
 @permission_required('controller.play_videos')
 def video_player(request):

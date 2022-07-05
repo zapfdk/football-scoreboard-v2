@@ -90,13 +90,14 @@ class ControllerConsumer(WebsocketConsumer):
 
             rw.save_gamestate(gs)
 
-current_gameclock_seconds = rw.get_current_gameclock_seconds()
+current_gameclock_microseconds = rw.get_current_gameclock_microseconds()
 clock = gameclock.GameClock(quarter_length=rw.get_current_gameconfig().config["quarter_length"])
 clock.start()
-if current_gameclock_seconds:
-    clock.set_clock(minutes=0, seconds=current_gameclock_seconds)
+clock.stop()
+if current_gameclock_microseconds is not None:
+    clock.set_clock(minutes=0, seconds=0, microseconds=current_gameclock_microseconds)
 
-rw.save_gameclock_seconds(clock)
+rw.save_gameclock_microseconds(clock)
 
 class ClockControllerConsumer(WebsocketConsumer):
     def connect(self):
@@ -122,14 +123,14 @@ class ClockControllerConsumer(WebsocketConsumer):
             hours, minutes, seconds = value.split(":")
             minutes, seconds = int(minutes), int(seconds)
             clock.set_clock(minutes=minutes, seconds=seconds)
-        rw.save_gameclock_seconds(clock)
+        rw.save_gameclock_microseconds(clock)
         self.send(text_data=json.dumps({
             "time": clock.remaining_time.seconds,
             "running": clock.running,
         }))
 
     def clock_callback(self):
-        rw.save_gameclock_seconds(clock)
+        rw.save_gameclock_microseconds(clock)
 
         self.send(text_data=json.dumps({
             "time": clock.remaining_time.seconds,
