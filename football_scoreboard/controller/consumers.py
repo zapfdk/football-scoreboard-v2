@@ -122,7 +122,7 @@ class ClockControllerConsumer(WebsocketConsumer):
         elif command == "SET_CLOCK":
             hours, minutes, seconds = value.split(":")
             minutes, seconds = int(minutes), int(seconds)
-            clock.set_clock(minutes=minutes, seconds=seconds)
+            clock.set_clock(minutes=minutes, seconds=seconds, microseconds=0)
         rw.save_gameclock_microseconds(clock)
         self.send(text_data=json.dumps({
             "time": clock.remaining_time.seconds,
