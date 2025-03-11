@@ -88,4 +88,4 @@ function update_display() {
         });
 }
 
-setInterval(update_display, 500);
+setInterval(update_display, 250);

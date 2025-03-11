@@ -91,7 +91,7 @@ class ControllerConsumer(WebsocketConsumer):
             rw.save_gamestate(gs)
 
 current_gameclock_microseconds = rw.get_current_gameclock_microseconds()
-clock = gameclock.GameClock(quarter_length=rw.get_current_gameconfig().config["quarter_length"])
+clock = gameclock.GameClock(quarter_length=rw.get_current_gameconfig().config["quarter_length"], interval_ms=500)
 clock.start()
 clock.stop()
 if current_gameclock_microseconds is not None:
