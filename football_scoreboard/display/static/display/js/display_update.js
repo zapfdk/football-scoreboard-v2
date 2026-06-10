@@ -28,11 +28,13 @@ function handle_gamestate_update(gamestate_data){
                 switch(gameStateKey){
                     case "score_home":
                         document.getElementsByClassName("score_home")[0].innerHTML = gameStateValue;
+                        break;
                     case "score_guest":
                         document.getElementsByClassName("score_guest")[0].innerHTML = gameStateValue;
                         break;
                     case "timeouts_home":
                         document.getElementsByClassName("timeouts_home")[0].innerHTML = gameStateValue;
+                        break;
                     case "timeouts_guest":
                         document.getElementsByClassName("timeouts_guest")[0].innerHTML = gameStateValue;
                         break;
@@ -56,7 +58,7 @@ function handle_gamestate_update(gamestate_data){
                         break;
                     case "possession":
                         let poss_classes = ["poss_home", "poss_guest"];
-                        if (gameStateValue <= 1 & gameStateValue >= 0) {
+                        if (gameStateValue <= 1 && gameStateValue >= 0) {
                             document.getElementsByClassName(poss_classes[gameStateValue])[0].innerHTML = FOOTBALL_CHAR;
                             document.getElementsByClassName(poss_classes[1 - gameStateValue])[0].innerHTML = "";
                         }

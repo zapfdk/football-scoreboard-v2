@@ -1,5 +1,3 @@
-from datetime import timedelta
-
 from django.shortcuts import render
 from django.http import JsonResponse
 
@@ -7,21 +5,20 @@ from football_scoreboard.redis_wrapper import RedisWrapper
 
 rw = RedisWrapper()
 
-# Create your views here.
+
 def index(request):
     return render(request, 'display/display.html')
 
-def convert_gamestate(gamestate):
-    return {
-        ""
-
-    }
 
 def get_gamestatus(request):
     gamestate = rw.get_current_gamestate()
-    gameclock = rw.get_current_gameclock_microseconds()
+    gameclock_us = rw.get_current_gameclock_microseconds()
     gameconfig = rw.get_current_gameconfig().config
-    gameclock_seconds = gameclock // 1e6
+
+    if gameclock_us is not None:
+        gameclock_seconds = int(gameclock_us // 1e6)
+    else:
+        gameclock_seconds = int(gameconfig["quarter_length"] * 60)
 
     gs = gamestate.state
 
@@ -36,10 +33,10 @@ def get_gamestatus(request):
             "name_guest": gameconfig["name"][1],
             "timeouts_home": gs["timeouts"][0],
             "timeouts_guest": gs["timeouts"][1],
-            "gameclock": f"{(gameclock_seconds % 3600 // 60):02}:{(gameclock_seconds%60):02}",
+            "gameclock": f"{(gameclock_seconds % 3600 // 60):02}:{(gameclock_seconds % 60):02}",
             "possession": gs["possession"],
             "quarter": gs["quarter"],
-            "clock_running": False,
+            "clock_running": rw.get_clock_running(),
         },
         "gameclock": gameclock_seconds,
         "gameconfig": gameconfig,
