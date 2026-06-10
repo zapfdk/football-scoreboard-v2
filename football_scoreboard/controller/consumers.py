@@ -7,6 +7,53 @@ from footballscoring import gameclock
 
 rw = RedisWrapper()
 
+_clock_consumers = set()
+_last_broadcast_second = None
+_clock_scheduler_started = False
+
+
+def _ensure_clock_scheduler():
+    global _clock_scheduler_started
+    if _clock_scheduler_started:
+        return
+    clock.start()
+    clock.running = False
+    _clock_scheduler_started = True
+
+
+def _clock_payload():
+    return {
+        "time": clock.remaining_time.seconds,
+        "running": clock.running,
+    }
+
+
+def _invalidate_broadcast_throttle():
+    global _last_broadcast_second
+    _last_broadcast_second = None
+
+
+def _broadcast_clock_state(force=False):
+    global _last_broadcast_second
+    current_second = int(clock.remaining_time.total_seconds())
+    if not force and _last_broadcast_second == current_second:
+        return
+    _last_broadcast_second = current_second
+    payload = json.dumps(_clock_payload())
+    dead = set()
+    for consumer in _clock_consumers:
+        try:
+            consumer.send(text_data=payload)
+        except Exception:
+            dead.add(consumer)
+    _clock_consumers -= dead
+
+
+def _on_clock_tick():
+    rw.save_gameclock_microseconds(clock)
+    if _clock_consumers:
+        _broadcast_clock_state()
+
 
 class ControllerConsumer(WebsocketConsumer):
     commands = {
@@ -41,11 +88,10 @@ class ControllerConsumer(WebsocketConsumer):
         status = "successful"
 
         try:
-            response = self.process_command(command, value)
+            self.process_command(command, value)
         except Exception as e:
             print(str(e))
             status = "not sucessfull"
-            response = rw.get_current_gamestate().state
 
         self.send(text_data=json.dumps({
             "msg": "UPDATE",
@@ -90,25 +136,31 @@ class ControllerConsumer(WebsocketConsumer):
 
             rw.save_gamestate(gs)
 
+
 current_gameclock_microseconds = rw.get_current_gameclock_microseconds()
-clock = gameclock.GameClock(quarter_length=rw.get_current_gameconfig().config["quarter_length"], interval_ms=500)
-clock.start()
-clock.stop()
+clock = gameclock.GameClock(
+    quarter_length=rw.get_current_gameconfig().config["quarter_length"],
+    interval_ms=500,
+)
 if current_gameclock_microseconds is not None:
     clock.set_clock(minutes=0, seconds=0, microseconds=current_gameclock_microseconds)
 
 rw.save_gameclock_microseconds(clock)
 
+
 class ClockControllerConsumer(WebsocketConsumer):
     def connect(self):
         self.accept()
-        clock.set_loop_callback(self.clock_callback)
+        _ensure_clock_scheduler()
+        _clock_consumers.add(self)
+        clock.set_loop_callback(_on_clock_tick)
+        _invalidate_broadcast_throttle()
+        _broadcast_clock_state(force=True)
 
-        self.send(text_data=json.dumps({
-            'msg': "UPDATE",
-            "time": clock.remaining_time.seconds,
-            "running": clock.running,
-        }))
+    def disconnect(self, code):
+        _clock_consumers.discard(self)
+        if not _clock_consumers:
+            clock.set_loop_callback(None)
 
     def receive(self, text_data=None, bytes_data=None):
         text_data_json = json.loads(text_data)
@@ -124,15 +176,5 @@ class ClockControllerConsumer(WebsocketConsumer):
             minutes, seconds = int(minutes), int(seconds)
             clock.set_clock(minutes=minutes, seconds=seconds, microseconds=0)
         rw.save_gameclock_microseconds(clock)
-        self.send(text_data=json.dumps({
-            "time": clock.remaining_time.seconds,
-            "running": clock.running,
-        }))
-
-    def clock_callback(self):
-        rw.save_gameclock_microseconds(clock)
-
-        self.send(text_data=json.dumps({
-            "time": clock.remaining_time.seconds,
-            "running": clock.running,
-        }))
+        _invalidate_broadcast_throttle()
+        _broadcast_clock_state(force=True)

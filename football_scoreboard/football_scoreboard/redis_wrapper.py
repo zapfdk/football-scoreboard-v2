@@ -42,3 +42,10 @@ class RedisWrapper:
 
     def save_gameclock_microseconds(self, gc):
         cache.set('gameclock', gc.remaining_time / td(microseconds=1), timeout=None)
+        cache.set('gameclock_running', gc.running, timeout=None)
+
+    def get_clock_running(self):
+        running = cache.get('gameclock_running')
+        if running is not None:
+            return running
+        return False
