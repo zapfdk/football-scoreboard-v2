@@ -22,16 +22,16 @@ class RedisWrapper:
             return gamestate.GameState()
 
     def save_gamestate(self, gs):
-        cache.set('gamestate', gs)
+        cache.set('gamestate', gs, timeout=None)
 
     def get_current_gameconfig(self):
         if (gc := cache.get('gameconfig')):
             return gc
         else:
-            return gamestate.GameConfig(quarter_length=12)
+            return gameconfig.GameConfig(quarter_length=12)
 
     def save_gameconfig(self, gc):
-        cache.set('gameconfig', gc)
+        cache.set('gameconfig', gc, timeout=None)
 
     def get_current_gameclock_microseconds(self):
         gc = cache.get('gameclock')
@@ -41,4 +41,4 @@ class RedisWrapper:
             return None 
 
     def save_gameclock_microseconds(self, gc):
-        cache.set('gameclock', gc.remaining_time / td(microseconds=1))
+        cache.set('gameclock', gc.remaining_time / td(microseconds=1), timeout=None)
