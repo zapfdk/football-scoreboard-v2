@@ -3,11 +3,13 @@
 var chatSocket;
 
 function setupWebsocket(){
+    if (chatSocket && chatSocket.readyState !== WebSocket.CLOSED) {
+        chatSocket.close();
+    }
     chatSocket = new WebSocket('ws://' + window.location.host + '/ws/controller/');
 
     chatSocket.onmessage = function (e) {
         let data = JSON.parse(e.data);
-        console.log(data["msg"]);
         if (data["msg"] === "UPDATE") {
             updateStatus(data["gamestate"]);
         }
@@ -17,7 +19,6 @@ function setupWebsocket(){
         }
         if ("gameconfig" in data){
             let gameconfig = data["gameconfig"];
-            console.log(gameconfig);
             document.getElementById("name_home").innerText = gameconfig["name"][0];
             document.getElementById("name_guest").innerText = gameconfig["name"][1];
         }
@@ -74,11 +75,8 @@ function updateStatus(data) {
         "timeouts": [document.getElementById("current_timeouts_home"), document.getElementById("current_timeouts_guest")],
         "possession": document.getElementById("current_possession")
     };
-    console.log(elementPropDict);
-    console.log(data);
     for (let key in data) {
         if (data.hasOwnProperty(key) && key in elementPropDict) {
-                console.log(key, data[key]);
             if (key === "score" || key === "timeouts") {
                 elementPropDict[key][0].innerHTML = data[key][0];
                 elementPropDict[key][1].innerHTML = data[key][1];
@@ -130,7 +128,6 @@ function setBallon() {
 function setScore(teamId) {
     let teams = {0: "home", 1: "guest"};
     let score = Number(document.getElementById("score_" + teams[teamId] + "_input").value);
-    console.log(teamId, score);
     sendControl('SET_SCORE', [score, teamId]);
     return false;
 }
@@ -154,7 +151,6 @@ function changeTimeouts(teamId, value){
 function setTimeouts(teamId) {
     let teams = {0: "home", 1: "guest"};
     let score = Number(document.getElementById("score_" + teams[teamId] + "_input").value);
-    console.log(teamId, score);
     sendControl('SET_TIMEOUTS', [score, teamId]);
     return false;
 }
