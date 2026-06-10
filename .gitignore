@@ -86,7 +86,9 @@ __pycache__/
 local_settings.py
 
 .env
+.venv/
 db.sqlite3
+football_scoreboard/staticfiles/
 
 .idea/
 .vscode/

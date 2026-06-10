@@ -1,12 +1,20 @@
+import os
+
 from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
-import controller.routing
+from django.core.asgi import get_asgi_application
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'football_scoreboard.settings')
+
+django_asgi_app = get_asgi_application()
+
+import controller.routing  # noqa: E402
 
 application = ProtocolTypeRouter({
+    'http': django_asgi_app,
     'websocket': AuthMiddlewareStack(
         URLRouter(
             controller.routing.websocket_urlpatterns
         )
-    )
+    ),
 })
-

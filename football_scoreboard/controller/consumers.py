@@ -1,6 +1,7 @@
 from channels.generic.websocket import WebsocketConsumer
 import json
 from ast import literal_eval
+from datetime import timedelta
 
 from football_scoreboard.redis_wrapper import RedisWrapper
 from footballscoring import gameclock
@@ -10,6 +11,37 @@ rw = RedisWrapper()
 _clock_consumers = set()
 _last_broadcast_second = None
 _clock_scheduler_started = False
+_clock_loop_callback = None
+
+
+def _ensure_game_clock_callbacks():
+    if getattr(gameclock.GameClock, '_scoreboard_callbacks_patched', False):
+        return
+
+    original_process_clock = gameclock.GameClock.process_clock
+
+    def process_clock(self):
+        global _clock_loop_callback
+        was_running = self.running
+        original_process_clock(self)
+        if was_running and _clock_loop_callback:
+            _clock_loop_callback()
+
+    def set_loop_callback(self, callback):
+        global _clock_loop_callback
+        _clock_loop_callback = callback
+
+    gameclock.GameClock.process_clock = process_clock
+    gameclock.GameClock.set_loop_callback = set_loop_callback
+    gameclock.GameClock._scoreboard_callbacks_patched = True
+
+
+def _restore_clock_from_microseconds(clock_obj, microseconds):
+    clock_obj.remaining_time = timedelta(microseconds=int(microseconds))
+    clock_obj.running = False
+
+
+_ensure_game_clock_callbacks()
 
 
 def _ensure_clock_scheduler():
@@ -23,7 +55,7 @@ def _ensure_clock_scheduler():
 
 def _clock_payload():
     return {
-        "time": clock.remaining_time.seconds,
+        "time": int(clock.remaining_time.total_seconds()),
         "running": clock.running,
     }
 
@@ -41,6 +73,7 @@ def _broadcast_clock_state(force=False):
     _last_broadcast_second = current_second
     payload = json.dumps(_clock_payload())
     dead = set()
+    global _clock_consumers
     for consumer in _clock_consumers:
         try:
             consumer.send(text_data=payload)
@@ -140,10 +173,10 @@ class ControllerConsumer(WebsocketConsumer):
 current_gameclock_microseconds = rw.get_current_gameclock_microseconds()
 clock = gameclock.GameClock(
     quarter_length=rw.get_current_gameconfig().config["quarter_length"],
-    interval_ms=500,
+    interval_ms=100,
 )
 if current_gameclock_microseconds is not None:
-    clock.set_clock(minutes=0, seconds=0, microseconds=current_gameclock_microseconds)
+    _restore_clock_from_microseconds(clock, current_gameclock_microseconds)
 
 rw.save_gameclock_microseconds(clock)
 
@@ -174,7 +207,7 @@ class ClockControllerConsumer(WebsocketConsumer):
         elif command == "SET_CLOCK":
             hours, minutes, seconds = value.split(":")
             minutes, seconds = int(minutes), int(seconds)
-            clock.set_clock(minutes=minutes, seconds=seconds, microseconds=0)
+            clock.set_clock(minutes=minutes, seconds=seconds)
         rw.save_gameclock_microseconds(clock)
         _invalidate_broadcast_throttle()
         _broadcast_clock_state(force=True)
